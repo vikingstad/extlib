@@ -22,10 +22,15 @@ module Extlib
       #
       # @example
       #   "active_record".camelize #=> "ActiveRecord"
+      #   "active_record".camelize(false) #=> "activeRecord"
       #   "active_record/errors".camelize #=> "ActiveRecord::Errors"
       #
-      def camelize(lower_case_and_underscored_word, *args)
-        lower_case_and_underscored_word.to_s.gsub(/\/(.?)/) { "::" + $1.upcase }.gsub(/(^|_)(.)/) { $2.upcase }
+      def camelize(lower_case_and_underscored_word, first_letter_in_uppercase = true, *args)
+        if first_letter_in_uppercase
+          lower_case_and_underscored_word.to_s.gsub(/\/(.?)/) { "::" + $1.upcase }.gsub(/(^|_)(.)/) { $2.upcase }
+        else
+          lower_case_and_underscored_word[0,1].downcase + camelize(lower_case_and_underscored_word)[1..-1]
+        end
       end
 
 
